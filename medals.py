@@ -19,48 +19,55 @@ medalResults = [
 
 
 def createMedalTable(results: list):
-    # Create a placing to points conversion dict to be referenced when creating the initial results table giving
+    # Create a placing to points conversion dict to be referenced when creating the results table giving
     # the winner 3 points, second place 2 points and third place 1 point
     points_conversion_dict = {"1": 3, "2": 2, "3": 1}
 
-    # Create an empty dict to house the nation and their corresponding cumulative scores
+    # Create an empty dict that will be used to house the nation and their corresponding cumulative scores
     results_table = {}
 
-    # Iterate through the results list to get the results of each sport by accessing the 'podium' key
+    # Iterate through the results list to get the results list for each sport by accessing the 'podium' key
     for sport in results:
         podium_list = sport["podium"]
 
-        for podium_spot in podium_list:
-            # Split the results item in the podium_list using the '.' separator to get both the placing and the nation
-            placing = (podium_spot.split(".")[0])
-            nation = (podium_spot.split(".")[1])
-            # Convert the placing to the amount of points to be awarded based on the points_conversion_dict
+        for placing_and_nation in podium_list:
+            # Split the podium_spot item in the podium_list using the '.' separator to get both the placing and the nation
+            placing = (placing_and_nation.split(".")[0])
+            nation = (placing_and_nation.split(".")[1])
+            # Convert the podium placing to the relevant amount of points to be awarded based on the points_conversion_dict
             points_to_award = points_conversion_dict[placing]
 
-            # Use exception handling, if nation key already exists in results_table += points to the nation based on
-            # the points_to_award value.
+            # Use exception handling, if nation key already exists in results_table += points_to_award to nation
             try:
                 results_table[nation] += points_to_award
-            # If key for 'nation' not already in results_table, create new dict key setting points_to_award as the value
+
+            # If 'nation' key not in results_table, create a new dict key setting points_to_award as the value
             except KeyError:
                 results_table[nation] = points_to_award
 
-    # reverse the order of the keys
+    # reverse the order of the keys as expectedTable keys ordered inversely to order of occurrence. As using py dicts,
+    # default order will == order of occurrence
     nation_keys = list(results_table.keys())
     reversed_keys = nation_keys[::-1]
 
-    # Sort the points from results table to run highest to lowest
-    sorted_values = sorted(results_table.values(), reverse=True)
+    # Re-order the points values in results_table to run highest to lowest
+    high_to_low_values = sorted(results_table.values(), reverse=True)
 
+    # Empty dict to populate with ordered table
     sorted_dict = {}
 
-    # Re-order the results_table dict
-    for i in sorted_values:
-        for k in reversed_keys:
-            if results_table[k] == i:
-                sorted_dict[k] = results_table[k]
+    # Re-order the results dict so the highest scoring nations appear at the top of the table.
+    # Iterate through the sorted values, will run highest to lowest so the nations with the most points will be added
+    # to the sorted table first
+    for value in high_to_low_values:
 
+        # Iterate through the reversed_keys list so the dict keys will be added in expectedTable order
+        for dict_key in reversed_keys:
 
+            # For each key in the list, check if its value in the unordered table matches the current for loop value,
+            # if the value does match add the key:value to the sorted table
+            if results_table[dict_key] == value:
+                sorted_dict[dict_key] = results_table[dict_key]
 
     return sorted_dict
 
@@ -83,3 +90,5 @@ def test_function():
 
 
 createMedalTable(medalResults)
+
+test_function()
