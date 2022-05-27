@@ -26,7 +26,7 @@ def createMedalTable(results: list):
     # Create an empty dict that will be used to house the nation and their corresponding cumulative scores
     results_table = {}
 
-    # Iterate through the results list to get the results list for each sport by accessing the 'podium' key
+    # Iterate through the results list to get the results for each sport by accessing the 'podium' key
     for sport in results:
         podium_list = sport["podium"]
 
