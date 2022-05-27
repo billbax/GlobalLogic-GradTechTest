@@ -31,13 +31,15 @@ def createMedalTable(results: list):
         podium_list = sport["podium"]
 
         for placing_and_nation in podium_list:
-            # Split the podium_spot item in the podium_list using the '.' separator to get both the placing and the nation
+            # Split the placing_and_nation item in the podium_list using the '.' separator to get both the placing and the nation
             placing = (placing_and_nation.split(".")[0])
             nation = (placing_and_nation.split(".")[1])
             # Convert the podium placing to the relevant amount of points to be awarded based on the points_conversion_dict
             points_to_award = points_conversion_dict[placing]
 
-            # Use exception handling, if nation key already exists in results_table += points_to_award to nation
+            # As using a dict to track the accumulated points of each nation will need to use exception handling to create
+            # a new key if the nation hasn't already been added.
+            # if nation key already exists in results_table += points_to_award to the value
             try:
                 results_table[nation] += points_to_award
 
@@ -56,15 +58,15 @@ def createMedalTable(results: list):
     # Empty dict to populate with ordered table
     sorted_dict = {}
 
-    # Re-order the results dict so the highest scoring nations appear at the top of the table.
+    # Re-order the results_table so the highest scoring nations appear at the top of the table.
     # Iterate through the sorted values, will run highest to lowest so the nations with the most points will be added
-    # to the sorted table first
+    # to the top of the table
     for value in high_to_low_values:
 
-        # Iterate through the reversed_keys list so the dict keys will be added in expectedTable order
+        # Iterate through the reversed_keys list so the dict keys will be added in the expectedTable order
         for dict_key in reversed_keys:
 
-            # For each key in the list, check if its value in the unordered table matches the current for loop value,
+            # For each dict_key in the loop, check if its value in the original results_table matches the current value,
             # if the value does match add the key:value to the sorted table
             if results_table[dict_key] == value:
                 sorted_dict[dict_key] = results_table[dict_key]
